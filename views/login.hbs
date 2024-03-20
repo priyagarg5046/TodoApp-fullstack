@@ -1,0 +1,53 @@
+<html>
+<head>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+  }
+
+  form {
+    width: 300px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+
+  button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 18px;
+  }
+</style>
+</head>
+<body>
+ <form id="login-form" action="/login" method="post">
+  <label for="username">Username</label>
+  <input type="text" id="username" name="username" required>
+  <label for="password">Password</label>
+  <input type="password" id="password" name="password" required>
+  <button type="submit">Log In</button>
+</form>
+</body>
+</html>
+
+
+
+    

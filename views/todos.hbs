@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TODO App</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+    *{
+    margin:0;
+    padding: 0;
+    font-family: 'Poppins',sans-serif;
+    box-sizing: border-box;
+}
+.container{
+    width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(135deg,#153677,#4e085f);
+    padding:10px;
+}
+.todo-app{
+    width: 100%;
+    max-width: 540px;
+    background:#fff;
+    margin: 100px auto 20px;
+    padding: 40px 30px 70px;
+    border-radius:10px;
+
+}
+.todo-app h2,h3{
+    color: #002765;
+    display:flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.todo-app h2 img{
+    width:30px;
+    margin-left:10px;
+
+}
+.row{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #edeef0;
+    border-radius: 30px;
+    padding-left:20px ;
+    margin-bottom: 25px;
+
+}
+input{
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 10px;
+    font-weight: 14px;
+
+}
+button{
+    border:none;
+    outline:none;
+    padding:16px 50px;
+    background:#ff5945;
+    color:#fff;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 50px;
+}
+ul li{
+    list-style: none;
+    font-size: 17px;
+    padding:12px 8px 12px 50px;
+    user-select: none;
+    cursor: pointer;
+    position: relative;
+}
+/*ul li::before{
+    content: '';
+    position: absolute;
+    height: 28px;
+    width: 28px;
+    border-radius: 50%;
+    background-image: url(https://cdn3.iconfinder.com/data/icons/arrows-160/96/uncheckedV_circle-512.png);
+    background-size: cover;
+    background-position: center;
+    top:10px;
+    left: 8px;
+
+} */
+ul li.checked{
+    color: #555;
+    text-decoration: line-through;
+    
+}
+ .btn-container {
+        padding: 20px;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        width: 200px;
+    }
+
+    .btn {
+        display: inline;
+        padding: 10px 20px;
+        margin-right: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #bc0de4;
+        color: #fff;
+        text-align: center;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .btn:hover {
+        background-color: #ce1cd8;
+    }
+li a {
+    text-decoration: none;
+
+}
+/*ul li.checked::before{
+    background-image: url(https://cdn4.iconfinder.com/data/icons/ui-outline-1-of-5/100/ui_outline_2-19-512.png);
+}*/
+
+</style>
+</head>
+<body>  
+ <div class="container">
+    <div class="todo-app">
+        <h2>To-Do List <img src="https://www.clipartkey.com/mpngs/m/312-3126147_logo-checklist-png-rosa.png"></h2>
+        <form class="row" action="/addtodos" method="post" >
+            <input type="text" id="input-box" placeholder="Add your text" name="taskname">
+            <button>Add</button>
+        </form>
+        <ul id="list-container">
+              {{#each todos}}
+<li><div><span id="text-{{id}}">{{taskname}}</span>
+    <span class="btn-container"><a href="/deletetodo/{{id}}"><button class="btn">Delete</button></a>
+    <a href=""><button class="btn"onclick="editTask({{id}})">Edit</button></a></span>
+</div>
+</li>
+            {{/each}}
+        </ul>
+    </div>
+    
+ </div>
+
+ <script>
+   function editTask(id) {
+    const taskTextElement = document.getElementById(`text-${id}`);
+    const currentTaskName = taskTextElement.textContent;
+    const newTaskName = prompt("Enter the updated task name:", currentTaskName);
+
+    if (newTaskName !== null) {
+        // Send AJAX request to update the task
+        updateTask(id, newTaskName);
+    }
+}
+
+function updateTask(id, newTaskName) {
+    // Send AJAX request to update the task
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", `/updatetodo`, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    const taskTextElement = document.getElementById(`text-${id}`);
+                    taskTextElement.textContent = newTaskName;
+                    alert("Task updated successfully!");
+                } else {
+                    alert("Failed to update task. Please try again later.");
+                }
+            } else {
+                alert("Failed to update task. Please try again later.");
+            }
+        }
+    };
+    xhr.send(JSON.stringify({ todoid: id, taskname: newTaskName }));
+}
+
+ </script>
+</body>
+</html>
